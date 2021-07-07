@@ -1,5 +1,7 @@
+<%@page import="com.tech.blog.helper.ConnectionHelper"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	<%@page import="java.sql.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +18,10 @@
 <body>
 	<h1>Good Morning Mohammad Gufran Ansari</h1>
 
-
+<%
+Connection con = ConnectionHelper.getConnection();
+%>
+<h1> <%=con %></h1>
 
 	<!-- javascript -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
