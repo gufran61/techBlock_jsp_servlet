@@ -32,17 +32,17 @@
 Register here
 </div>
 <div class="card-body">
-<form>
+<form id="reg-form" action="registerServlet" method="post">
 
  <div class="form-group">
     <label for="exampleInputEmail1">User Name</label>
-    <input type="text" class="form-control" id="user_name" aria-describedby="emailHelp" placeholder="Enter User Name">
+    <input name="username" type="text" class="form-control" id="user_name" aria-describedby="emailHelp" placeholder="Enter User Name">
 
   </div>
 
   <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <input  name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
   </div>
   
@@ -50,25 +50,28 @@ Register here
   
   <div class="form-group">
     <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
   </div>
   <div class="form-group">
     <label for="gender">Select Gender</label>
     <br>
-    <input type="radio" id="gender" name="gender">Male
-     <input type="radio" id="gender" name="gender">Female
+    <input type="radio" id="gender" name="gender" value="male">Male
+     <input type="radio" id="gender" name="gender" value="female">Female
   </div>
   
   <div class="form-group">
   <textarea name="about" class="form-control"  cols="10"  placeholder="Enter something about your self"></textarea>
   </div>
   <div class="form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+    <input name="check" type="checkbox" class="form-check-input" id="exampleCheck1">
     <label class="form-check-label" for="exampleCheck1">Agree terms and condition</label>
   </div>
-  
-  
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <br>
+  <div class="container text-center " id="loader" style="display: none;">
+  <span class="fa fa-refresh fa-spin fa-2x"></span>
+  <h4>Please Wait.....</h4>
+  </div>
+  <button id="sumbimt-btn" type="submit" class="btn btn-primary">Submit</button>
 </form>
 </div>
 <div class="card-footer">
@@ -91,6 +94,45 @@ Register here
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
 	<script type="text/javascript" src="js/myjs.js"></script>
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<script>
+$(document).ready(function(){
+	console.log("loaded.........")
+	$('#reg-form').on('submit', function(event){
+event.preventDefault();
+let form = new FormData(this);
+$("#sumbimt-btn").hide();
+$("#loader").show();
+//send register servlet:
+	$.ajax({
+url: "registerServlet",
+type: 'POST' ,
+data: form,
+success: function (data, textStatus, jqXHR){
+	console.log(data)
+	$("#sumbimt-btn").show();
+	$("#loader").hide();
+	if(data.trim()==='done')
+		{
+	swal("registered successfully.. we redirecting to login page")
+	.then((value) => {
+	  window.location="login.jsp"
+	});
+	}else
+		{
+		swal(data);
+		}
+},
+error: function (jqXHR, textStatus, errorThrown){
+	$("#sumbimt-btn").show();
+	$("#loader").hide();
+	swal("something went wrong..try again");
+},
+processData: false,
+contentType: false
+		});
+		});
+});
+</script>
 </body>
 </html>
